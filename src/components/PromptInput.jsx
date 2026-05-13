@@ -12,12 +12,12 @@ export default function PromptInput({ prompt, setPrompt, selectedModels, setSele
   }
 
   return (
-    <div className="relative group w-full max-w-2xl mx-auto">
-      {/* Outer glow */}
-      <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-3xl blur-lg opacity-30 group-hover:opacity-50 transition-opacity duration-500 animate-glow-pulse" />
+    <div className="w-full">
+      <label className="block text-xs uppercase tracking-widest text-[var(--color-text-faint)] mb-2">
+        Your question
+      </label>
 
-      {/* Input container */}
-      <div className="relative bg-white rounded-2xl p-4 shadow-xl">
+      <div className="bg-white border-[1.5px] border-[var(--color-border)] rounded-xl shadow-sm">
         <textarea
           ref={textareaRef}
           value={prompt}
@@ -26,21 +26,20 @@ export default function PromptInput({ prompt, setPrompt, selectedModels, setSele
           placeholder="Ask the council anything…"
           rows={3}
           disabled={loading}
-          className="w-full border-none outline-none text-xl text-slate-900 resize-none placeholder:text-slate-400 font-sans leading-relaxed disabled:opacity-50"
+          className="w-full border-none outline-none text-lg text-[var(--color-text)] resize-none placeholder:text-[var(--color-text-faint)] font-sans leading-relaxed disabled:opacity-50 p-4 bg-transparent rounded-xl"
         />
 
-        {/* Bottom utility bar */}
-        <div className="flex items-center justify-between pt-3 border-t border-slate-100 gap-3 flex-wrap">
+        <div className="flex items-center justify-between px-4 pb-3 pt-2 border-t border-[var(--color-border)] gap-3 flex-wrap">
           <ModelSelector selected={selectedModels} onChange={setSelectedModels} />
 
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5">
-              <span className="text-xs text-slate-400">Rounds</span>
+              <span className="text-xs text-[var(--color-text-faint)] uppercase tracking-wide">Rounds</span>
               <select
                 value={debateRounds}
                 onChange={e => setDebateRounds(Number(e.target.value))}
                 disabled={loading}
-                className="text-xs border border-slate-200 rounded-lg px-2 py-1 text-slate-700 bg-white outline-none focus:border-indigo-400 disabled:opacity-50"
+                className="text-xs border border-[var(--color-border)] rounded-lg px-2 py-1 text-[var(--color-text-muted)] bg-white outline-none focus:border-[var(--color-accent)] disabled:opacity-50"
               >
                 {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n}</option>)}
               </select>
@@ -49,11 +48,11 @@ export default function PromptInput({ prompt, setPrompt, selectedModels, setSele
             <button
               onClick={onSubmit}
               disabled={loading || !prompt.trim()}
-              className="w-9 h-9 rounded-xl bg-indigo-500 hover:bg-indigo-600 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-colors shadow-md"
+              className="px-4 h-9 rounded-lg bg-[var(--color-accent)] hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-opacity text-white text-sm font-medium"
             >
               {loading
                 ? <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                : <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" /></svg>
+                : 'Ask →'
               }
             </button>
           </div>
