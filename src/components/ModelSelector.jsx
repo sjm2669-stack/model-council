@@ -25,7 +25,7 @@ export default function ModelSelector({ selected, onChange }) {
             className={`text-xs px-3 py-1.5 rounded-full font-medium transition-colors duration-150 border ${
               active
                 ? `${activeClass} border-transparent`
-                : 'bg-[#f5f0e8] text-[var(--color-text-muted)] border-transparent hover:bg-[var(--color-border)]'
+                : 'bg-[var(--color-chip-inactive)] text-[var(--color-text-muted)] border-transparent hover:bg-[var(--color-border)]'
             }`}
           >
             {label}

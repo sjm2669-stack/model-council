@@ -12,6 +12,7 @@
     --color-text-faint:   #a8a29e;
     --color-accent:       #b45309;
     --color-accent-soft:  #fef2ee;
+    --color-chip-inactive: #f5f0e8;
   }
 
   body {

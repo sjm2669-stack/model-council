@@ -27,7 +27,7 @@ export default function ModelCard({ response, index }) {
           {response.model.charAt(0).toUpperCase()}
         </div>
         <div>
-          <div className="font-semibold text-[var(--color-text)] text-sm" style={{ color: colors.text }}>
+          <div className="font-semibold text-sm" style={{ color: colors.text }}>
             {response.model}
           </div>
           <div className="text-xs text-[var(--color-text-faint)]">{response.provider}</div>
@@ -54,13 +54,13 @@ export function ModelCardSkeleton() {
         <div className="w-8 h-8 rounded-lg bg-[var(--color-border)]" />
         <div className="space-y-1.5">
           <div className="h-3 w-24 bg-[var(--color-border)] rounded" />
-          <div className="h-2.5 w-16 bg-[#f5f0e8] rounded" />
+          <div className="h-2.5 w-16 bg-[var(--color-chip-inactive)] rounded" />
         </div>
       </div>
       <div className="space-y-2">
-        <div className="h-3 bg-[#f5f0e8] rounded w-full" />
-        <div className="h-3 bg-[#f5f0e8] rounded w-5/6" />
-        <div className="h-3 bg-[#f5f0e8] rounded w-4/6" />
+        <div className="h-3 bg-[var(--color-chip-inactive)] rounded w-full" />
+        <div className="h-3 bg-[var(--color-chip-inactive)] rounded w-5/6" />
+        <div className="h-3 bg-[var(--color-chip-inactive)] rounded w-4/6" />
       </div>
     </div>
   )
