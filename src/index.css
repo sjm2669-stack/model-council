@@ -3,31 +3,20 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --color-bg:           #faf7f2;
+    --color-surface:      #ffffff;
+    --color-border:       #e7e5e0;
+    --color-text:         #1c1917;
+    --color-text-muted:   #78716c;
+    --color-text-faint:   #a8a29e;
+    --color-accent:       #b45309;
+    --color-accent-soft:  #fef2ee;
+  }
+
   body {
     font-family: 'Inter', sans-serif;
-    background-color: #0f172a;
-    color: white;
-  }
-}
-
-@layer utilities {
-  .glass-soft {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .glass-strong {
-    background: rgba(30, 41, 59, 0.7);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  }
-
-  .cursor-blink::after {
-    content: '|';
-    animation: blink 1s infinite;
-    color: #6366f1;
-    margin-left: 2px;
+    background-color: var(--color-bg);
+    color: var(--color-text);
   }
 }
