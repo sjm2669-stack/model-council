@@ -137,7 +137,7 @@ export default function App() {
             const round = rounds.find(r => r.round === activeTab)
             if (!round) return null
             const isActive = isStreaming && activeTab === rounds[rounds.length - 1].round
-            const pending = selectedModels.length - round.responses.length
+            const pending = Math.max(0, selectedModels.length - round.responses.length)
             return (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {round.responses.map((r, idx) => (
