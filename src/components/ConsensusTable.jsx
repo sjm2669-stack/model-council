@@ -11,8 +11,8 @@ export default function ConsensusTable({ rows }) {
   return (
     <div className="mt-6">
       <h4 className="text-xs uppercase tracking-widest text-[var(--color-text-faint)] mb-3">Consensus Table</h4>
-      <div className="bg-white border border-[var(--color-border)] rounded-xl overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white border border-[var(--color-border)] rounded-xl overflow-hidden overflow-x-auto">
+        <table className="w-full text-sm min-w-[500px]">
           <thead>
             <tr className="border-b border-[var(--color-border)]">
               <th className="text-left px-5 py-3 text-xs uppercase tracking-wide text-[var(--color-text-faint)] font-medium">Model</th>

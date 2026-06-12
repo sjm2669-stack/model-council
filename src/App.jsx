@@ -5,6 +5,8 @@ import PromptInput from './components/PromptInput.jsx'
 import ModelCard, { ModelCardSkeleton } from './components/ModelCard.jsx'
 import SynthesisPanel from './components/SynthesisPanel.jsx'
 
+const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform)
+
 export default function App() {
   const [prompt, setPrompt] = useState('')
   const [selectedModels, setSelectedModels] = useState(['claude', 'gpt4o', 'gemini'])
@@ -22,6 +24,10 @@ export default function App() {
     reset()
     setPrompt('')
     setActiveTab(null)
+  }
+
+  const handleRetry = () => {
+    run(prompt, selectedModels, debateRounds)
   }
 
   useEffect(() => {
@@ -44,8 +50,8 @@ export default function App() {
       {/* Hero — idle state */}
       {!hasResults && (
         <div className="flex items-center justify-center min-h-screen px-6 pt-20 pb-12">
-          <div className="w-full max-w-3xl grid grid-cols-5 gap-10 items-center">
-            <div className="col-span-2">
+          <div className="w-full max-w-3xl grid grid-cols-1 md:grid-cols-5 gap-10 items-center">
+            <div className="md:col-span-2">
               <p className="text-xs uppercase tracking-widest text-[var(--color-accent)] font-medium mb-4">
                 Model Council
               </p>
@@ -55,13 +61,13 @@ export default function App() {
               <p className="text-[var(--color-text-muted)] text-sm leading-relaxed mb-6">
                 Pit Claude, GPT-4o, and Gemini against each other. Get a synthesised answer you can trust.
               </p>
-              <div className="flex gap-1.5">
+              <div className="flex gap-1.5" aria-hidden="true">
                 <span className="w-2 h-2 rounded-full bg-[var(--color-accent)]" />
                 <span className="w-2 h-2 rounded-full bg-[var(--color-border)]" />
                 <span className="w-2 h-2 rounded-full bg-[var(--color-border)]" />
               </div>
             </div>
-            <div className="col-span-3">
+            <div className="md:col-span-3">
               <PromptInput
                 prompt={prompt}
                 setPrompt={setPrompt}
@@ -72,7 +78,7 @@ export default function App() {
                 onSubmit={handleSubmit}
                 loading={isStreaming}
               />
-              <p className="text-xs text-[var(--color-text-faint)] mt-2 text-right">⌘ + Enter to submit</p>
+              <p className="text-xs text-[var(--color-text-faint)] mt-2 text-right">{isMac ? '⌘' : 'Ctrl'} + Enter to submit</p>
             </div>
           </div>
         </div>
@@ -92,18 +98,27 @@ export default function App() {
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-100 rounded-xl p-4 text-red-600 text-sm mb-6">
-              {error}
+            <div className="bg-red-50 border border-red-100 rounded-xl p-4 text-red-600 text-sm mb-6 flex items-center justify-between gap-4">
+              <span>{error}</span>
+              <button
+                onClick={handleRetry}
+                className="shrink-0 text-xs font-medium border border-red-200 rounded-lg px-3 py-1.5 hover:bg-red-100 transition-colors"
+              >
+                Retry →
+              </button>
             </div>
           )}
 
-          <div className="flex gap-0 border-b border-[var(--color-border)] mb-6">
+          <div role="tablist" className="flex gap-0 border-b border-[var(--color-border)] mb-6">
             {rounds.map((round) => {
               const isActive = activeTab === round.round
               const isCurrentlyStreaming = isStreaming && round.round === rounds[rounds.length - 1].round
+              const isComplete = !isCurrentlyStreaming
               return (
                 <button
                   key={round.round}
+                  role="tab"
+                  aria-selected={isActive}
                   onClick={() => setActiveTab(round.round)}
                   className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors mr-1 ${
                     isActive
@@ -113,15 +128,20 @@ export default function App() {
                 >
                   {round.round === 1 ? 'Round 1' : round.label ?? `Round ${round.round}`}
                   {isCurrentlyStreaming && (
-                    <span className="ml-1.5 inline-block w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] animate-pulse" />
+                    <span className="ml-1.5 inline-block w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] animate-pulse" aria-hidden="true" />
+                  )}
+                  {isComplete && !isActive && (
+                    <span className="ml-1.5 text-[var(--color-text-faint)] text-xs" aria-hidden="true">✓</span>
                   )}
                 </button>
               )
             })}
             <button
+              role="tab"
+              aria-selected={activeTab === 'synthesis'}
               onClick={() => synthesis && setActiveTab('synthesis')}
-              disabled={!synthesis}
-              className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ml-auto ${
+              disabled={!synthesis && !isStreaming}
+              className={`px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ml-auto flex items-center gap-1.5 ${
                 activeTab === 'synthesis'
                   ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
                   : synthesis
@@ -130,6 +150,9 @@ export default function App() {
               }`}
             >
               Synthesis ✦
+              {isStreaming && !synthesis && (
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-border)] animate-pulse" aria-hidden="true" />
+              )}
             </button>
           </div>
 

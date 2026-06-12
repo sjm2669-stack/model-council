@@ -14,17 +14,20 @@ export default function ModelSelector({ selected, onChange }) {
   }
 
   return (
-    <div className="flex items-center gap-2 flex-wrap">
+    <div className="flex items-center gap-2 flex-wrap" role="group" aria-label="Select models">
       <span className="text-xs text-[var(--color-text-faint)] uppercase tracking-wide mr-1">Models</span>
       {MODELS.map(({ key, label, activeClass }) => {
         const active = selected.includes(key)
+        const locked = active && selected.length <= 2
         return (
           <button
             key={key}
             onClick={() => toggle(key)}
+            aria-pressed={active}
+            title={locked ? 'At least 2 models required' : undefined}
             className={`text-xs px-3 py-1.5 rounded-full font-medium transition-colors duration-150 border ${
               active
-                ? `${activeClass} border-transparent`
+                ? `${activeClass} border-transparent ${locked ? 'opacity-50 cursor-not-allowed' : ''}`
                 : 'bg-[var(--color-chip-inactive)] text-[var(--color-text-muted)] border-transparent hover:bg-[var(--color-border)]'
             }`}
           >
