@@ -1,5 +1,8 @@
 import { useState, useCallback } from 'react'
 
+const COUNCIL_URL = import.meta.env.VITE_COUNCIL_URL ?? '/api/council'
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
+
 export function useCouncil() {
   const [status, setStatus] = useState('idle')   // idle | streaming | complete | error
   const [rounds, setRounds] = useState([])        // [{round, label, responses[]}]
@@ -14,10 +17,13 @@ export function useCouncil() {
     setConsensus(null)
     setError(null)
 
+    const headers = { 'Content-Type': 'application/json' }
+    if (SUPABASE_ANON_KEY) headers['Authorization'] = `Bearer ${SUPABASE_ANON_KEY}`
+
     try {
-      const response = await fetch('/api/council', {
+      const response = await fetch(COUNCIL_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ prompt, models: selectedModels, debate_rounds: debateRounds }),
       })
 
@@ -70,6 +76,14 @@ export function useCouncil() {
     }
   }, [])
 
+  const load = useCallback(({ rounds, synthesis, consensus }) => {
+    setStatus('complete')
+    setRounds(rounds)
+    setSynthesis(synthesis)
+    setConsensus(consensus)
+    setError(null)
+  }, [])
+
   const reset = useCallback(() => {
     setStatus('idle')
     setRounds([])
@@ -78,5 +92,5 @@ export function useCouncil() {
     setError(null)
   }, [])
 
-  return { status, rounds, synthesis, consensus, error, run, reset }
+  return { status, rounds, synthesis, consensus, error, run, load, reset }
 }
