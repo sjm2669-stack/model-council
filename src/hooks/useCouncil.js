@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react'
 
 const COUNCIL_URL = import.meta.env.VITE_COUNCIL_URL ?? '/api/council'
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
+// Optional Bearer token — supports both Deno Deploy and Supabase anon key
+const API_AUTH_TOKEN = import.meta.env.VITE_API_AUTH_TOKEN ?? import.meta.env.VITE_SUPABASE_ANON_KEY
 
 export function useCouncil() {
   const [status, setStatus] = useState('idle')   // idle | streaming | complete | error
@@ -18,7 +19,7 @@ export function useCouncil() {
     setError(null)
 
     const headers = { 'Content-Type': 'application/json' }
-    if (SUPABASE_ANON_KEY) headers['Authorization'] = `Bearer ${SUPABASE_ANON_KEY}`
+    if (API_AUTH_TOKEN) headers['Authorization'] = `Bearer ${API_AUTH_TOKEN}`
 
     try {
       const response = await fetch(COUNCIL_URL, {

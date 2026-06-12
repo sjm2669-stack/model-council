@@ -1,5 +1,3 @@
-import { serve } from 'https://deno.land/std@0.224.0/http/server.ts'
-
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -177,7 +175,7 @@ aligns with a synthesis. Respond with a single JSON object and no other text.`
 // Main handler
 // ---------------------------------------------------------------------------
 
-serve(async (req: Request) => {
+Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: CORS })
   }

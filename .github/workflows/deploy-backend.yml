@@ -1,0 +1,26 @@
+name: Deploy backend to Deno Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/functions/council/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write   # required for OIDC auth with Deno Deploy
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: model-council          # must match your Deno Deploy project name
+          entrypoint: supabase/functions/council/index.ts
+          root: .
