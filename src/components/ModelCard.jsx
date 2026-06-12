@@ -64,7 +64,7 @@ export default function ModelCard({ response, index }) {
           {response.model.charAt(0).toUpperCase()}
         </div>
         <div className="min-w-0">
-          <div className="font-semibold text-sm truncate" style={{ color: colors.text }}>
+          <div className="font-semibold text-sm truncate" style={{ color: colors.text }} title={response.model}>
             {response.model}
           </div>
           <div className="text-xs text-[var(--color-text-faint)]">{response.provider}</div>

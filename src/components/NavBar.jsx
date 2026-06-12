@@ -14,7 +14,7 @@ export default function NavBar({ onReset, showReset, onOpenHistory, historyCount
           className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors flex items-center gap-1.5"
           aria-label="Open debate history"
         >
-          History
+          <span>History</span>
           {historyCount > 0 && (
             <span className="text-xs bg-[var(--color-chip-inactive)] text-[var(--color-text-faint)] rounded-full px-1.5 py-0.5 leading-none">
               {historyCount}
