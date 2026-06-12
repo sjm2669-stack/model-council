@@ -175,9 +175,13 @@ aligns with a synthesis. Respond with a single JSON object and no other text.`
 // Main handler
 // ---------------------------------------------------------------------------
 
-Deno.serve(async (req: Request) => {
+export async function handleCouncil(req: Request): Promise<Response> {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: CORS })
+  }
+
+  if (req.method !== 'POST') {
+    return new Response('Method not allowed', { status: 405, headers: CORS })
   }
 
   const ANTHROPIC_API_KEY = Deno.env.get('ANTHROPIC_API_KEY') ?? ''
@@ -186,7 +190,7 @@ Deno.serve(async (req: Request) => {
 
   if (!ANTHROPIC_API_KEY || !OPENAI_API_KEY || !GOOGLE_API_KEY) {
     return new Response(
-      JSON.stringify({ error: 'Missing API keys. Set ANTHROPIC_API_KEY, OPENAI_API_KEY, GOOGLE_API_KEY as Supabase secrets.' }),
+      JSON.stringify({ error: 'Missing API keys. Set ANTHROPIC_API_KEY, OPENAI_API_KEY, GOOGLE_API_KEY in the Deno Deploy dashboard (Settings → Environment Variables).' }),
       { status: 500, headers: { ...CORS, 'Content-Type': 'application/json' } },
     )
   }
@@ -329,4 +333,4 @@ Deno.serve(async (req: Request) => {
       Connection: 'keep-alive',
     },
   })
-})
+}
