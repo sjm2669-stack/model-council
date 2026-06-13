@@ -8,7 +8,19 @@
 
 import { handleCouncil } from './council.ts'
 
-const DIST = new URL('../dist/', import.meta.url)
+// import.meta.url can resolve unpredictably in Deno Deploy's runtime;
+// Deno.cwd() gives the actual working directory the process was started from.
+const DIST_DIR = Deno.cwd() + '/dist'
+
+console.log('[startup] import.meta.url:', import.meta.url)
+console.log('[startup] Deno.cwd():', Deno.cwd())
+console.log('[startup] DIST_DIR:', DIST_DIR)
+try {
+  const probe = await Deno.readFile(DIST_DIR + '/index.html')
+  console.log('[startup] dist/index.html found, size:', probe.byteLength)
+} catch (e) {
+  console.log('[startup] dist/index.html NOT found:', (e as Error).message)
+}
 
 const CONTENT_TYPES: Record<string, string> = {
   '.html':  'text/html; charset=utf-8',
@@ -40,11 +52,11 @@ async function serveStatic(pathname: string): Promise<Response | null> {
   const relative = pathname.replace(/^\/+/, '') || 'index.html'
   if (relative.split('/').includes('..')) return null
 
-  const fileUrl = new URL(relative, DIST)
-  if (!fileUrl.pathname.startsWith(DIST.pathname)) return null
+  const filePath = DIST_DIR + '/' + relative
+  if (!filePath.startsWith(DIST_DIR + '/')) return null
 
   try {
-    const file = await Deno.readFile(fileUrl)
+    const file = await Deno.readFile(filePath)
     // Vite content-hashes everything under assets/ — cache those hard;
     // index.html must always revalidate so deploys take effect immediately
     const cacheControl = relative.startsWith('assets/')
