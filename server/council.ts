@@ -157,16 +157,29 @@ Now refine your perspective. Acknowledge areas of genuine agreement, respectfull
   return [{ role: 'user', content }]
 }
 
-const ROUND1_SYSTEM = `You are participating in a multi-model AI council debate. \
-Provide a thorough, well-reasoned response. Be specific and substantive.`
+const ROUND1_SYSTEM = `You are one of several frontier AI models in a council debate. \
+The user asked a question; each model answers independently, and the answers appear \
+side-by-side so the user can compare reasoning before they feed into later debate rounds.
 
-const DEBATE_SYSTEM = `You are participating in a multi-model AI council debate. \
-Engage critically and constructively with the other models' responses. \
-Refine your position based on the merits of their arguments.`
+Give your genuine, well-reasoned position. Be specific and substantive. \
+Format in markdown. Aim for under 300 words — dense and useful beats long.`
 
-const SYNTHESIS_SYSTEM = `You are an expert synthesizer reviewing a multi-model AI debate. \
-Produce a comprehensive, balanced answer that captures the best insights from all participants. \
-Note key areas of consensus and any meaningful remaining disagreements.`
+const DEBATE_SYSTEM = `You are one of several frontier AI models in a council debate, \
+now reviewing the other models' answers. Your refined position appears side-by-side \
+with theirs and feeds a final synthesis, so make real disagreements explicit rather \
+than diplomatically vague.
+
+Acknowledge genuine agreement, challenge weak arguments with evidence, and update \
+your position when another model's reasoning is better. Format in markdown. \
+Aim for under 300 words.`
+
+const SYNTHESIS_SYSTEM = `You are the synthesizer for a multi-model AI council debate. \
+The user asked one question and wants a single answer they can trust more than any \
+one model's take.
+
+Lead with the answer itself, then note where the models genuinely agreed and any \
+disagreement that should change the user's confidence. Format in markdown. \
+No meta-commentary about the debate process.`
 
 const CONSENSUS_SYSTEM = `You are an impartial judge evaluating whether each model's final response \
 aligns with a synthesis. Respond with a single JSON object and no other text.`
