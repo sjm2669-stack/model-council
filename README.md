@@ -24,7 +24,6 @@ and can be exported as Markdown.
 src/                 React 18 + Vite + Tailwind frontend
 server/main.ts       Deno entrypoint: serves dist/ + routes /api/council
 server/council.ts    Debate engine: parallel model calls, synthesis, consensus
-.github/workflows/   Builds the frontend and deploys to Deno Deploy on push to main
 ```
 
 One Deno Deploy project serves both the static frontend and the API from the
@@ -50,13 +49,22 @@ By default the dev server proxies `/api` to `localhost:8000`. Either:
 
 ## Deployment
 
-Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds the
-frontend (`npm run build`) and deploys `server/main.ts` + `dist/` to the
-`model-council` project on Deno Deploy via OIDC.
+Deploys automatically to [Deno Deploy](https://dash.deno.com) via the native
+GitHub integration — no GitHub Actions workflow needed.
 
-One-time setup in the [Deno Deploy dashboard](https://dash.deno.com):
+**One-time setup:**
 
-1. Link the GitHub repository to the project and select **GitHub Actions**
-   as the deployment mode.
-2. Set the server-side secrets under **Settings → Environment Variables**:
-   `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GOOGLE_API_KEY`.
+1. Go to [console.deno.com](https://console.deno.com) → open the `model-council`
+   project → **Settings → Git**.
+2. Connect `sjm2669-stack/model-council`, set the **production branch** to
+   `master`, and leave the build step as:
+   ```
+   npm ci && npm run build
+   ```
+   Set the **entrypoint** to `server/main.ts`.
+3. Under **Settings → Environment Variables**, add:
+   - `ANTHROPIC_API_KEY`
+   - `OPENAI_API_KEY`
+   - `GOOGLE_API_KEY`
+
+After that, every push to `master` triggers an automatic deploy.
