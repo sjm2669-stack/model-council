@@ -5,7 +5,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        serif: ['Georgia', 'serif'],
+        serif: ['Lora', 'Georgia', 'serif'],
       },
       colors: {
         cream: '#faf7f2',
